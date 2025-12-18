@@ -1,6 +1,15 @@
 # Task Manager Fullstack Application
 
-A comprehensive task management system with role-based access control, activity logging, and modern web technologies. Built with a clean separation of concerns using React frontend and Node.js/Express backend with PostgreSQL database.
+A task management system with role-based access control, activity logging, and modern web technologies. Built with a clean separation of concerns using React frontend and Node.js/Express backend with PostgreSQL database.
+
+## Notes for Reviewers
+
+- The database is pre-seeded with admin and user accounts for easy testing.
+- Role-based permissions can be verified by logging in with different accounts.
+- No live deployment is required; the application is intended to run locally.
+- Activity logs are viewable via the admin dashboard.
+
+
 
 ## Features
 
@@ -52,7 +61,7 @@ A comprehensive task management system with role-based access control, activity 
 3. **Setup Database**
    ```bash
    # Make sure PostgreSQL is running
-   npx prisma migrate deploy
+   npx prisma migrate dev
    npx tsx prisma/seed.mjs  # Seed with test data
    ```
 
