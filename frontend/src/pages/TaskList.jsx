@@ -121,55 +121,52 @@ const TaskList = () => {
       </div>
 
       {user?.role === 'admin' && activities.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+        <div className="activity-log-section">
+          <h2 className="activity-log-header">Recent Activity</h2>
 
-          <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+          <div className="activity-log-info">
+            <div>
+              <h3 className="activity-log-title">Recent Activities</h3>
+              <p className="activity-log-count">Showing {Math.min(activities.length, 5)} activities</p>
+            </div>
+            <div className="activity-log-badges">
+              <span className="activity-badge create">CREATE</span>
+              <span className="activity-badge update">UPDATE</span>
+              <span className="activity-badge delete">DELETE</span>
+            </div>
+          </div>
+
+          <div className="activity-log-container">
+            <div className="activity-table-container">
+              <table className="activity-table">
+                <thead>
                   <tr>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Action
-                    </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Details
-                    </th>
-                    <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Time
-                    </th>
+                    <th>Action</th>
+                    <th>User</th>
+                    <th>Details</th>
+                    <th>Time</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {activities.slice(0, 5).map(activity => (
-                    <tr key={activity.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-8 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          activity.action === 'CREATE' ? 'bg-green-100 text-green-800' :
-                          activity.action === 'UPDATE' ? 'bg-blue-100 text-blue-800' :
-                          activity.action === 'DELETE' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
+                    <tr key={activity.id}>
+                      <td>
+                        <span className={`activity-badge ${activity.action.toLowerCase()}`}>
                           {activity.action}
                         </span>
                       </td>
-                      <td className="px-8 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {activity.user?.email || 'Unknown'}
-                      </td>
-                      <td className="px-8 py-4 text-sm text-gray-900 max-w-md">
-                        <span className="truncate block">
+                      <td>{activity.user?.email || 'Unknown'}</td>
+                      <td className="activity-details">
+                        <span>
                           {activity.details || `${activity.action} ${activity.entityType} #${activity.entityId}`}
                         </span>
                       </td>
-                      <td className="px-8 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex flex-col">
-                          <span className="font-medium">
+                      <td className="activity-time">
+                        <div>
+                          <span className="date">
                             {new Date(activity.timestamp).toLocaleDateString()}
                           </span>
-                          <span className="text-xs">
+                          <span className="time">
                             {new Date(activity.timestamp).toLocaleTimeString()}
                           </span>
                         </div>
@@ -181,10 +178,8 @@ const TaskList = () => {
             </div>
 
             {activities.length > 5 && (
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-200 text-center">
-                <Link to="/activity-logs" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  View all activities →
-                </Link>
+              <div className="activity-view-all">
+                <Link to="/activity-logs">View all activities →</Link>
               </div>
             )}
           </div>

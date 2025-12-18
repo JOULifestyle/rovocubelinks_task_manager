@@ -198,6 +198,211 @@ button:focus-visible {
   background: rgba(255,255,255,0.1);
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Activity Log Styles */
+.activity-log-section {
+  margin-top: 3rem;
+}
+
+.activity-log-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #213547;
+  margin-bottom: 1.5rem;
+}
+
+.activity-log-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.activity-log-info {
+  padding: 1rem 2rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-log-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #213547;
+}
+
+.activity-log-count {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.activity-log-badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.activity-badge {
+  display: inline-flex;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.activity-badge.create {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.activity-badge.update {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.activity-badge.delete {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.activity-table-container {
+  overflow-x: auto;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.activity-table thead {
+  background-color: #f9f9f9;
+}
+
+.activity-table th {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.activity-table tbody {
+  background-color: white;
+}
+
+.activity-table tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.15s;
+}
+
+.activity-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.activity-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: #213547;
+}
+
+.activity-table td:first-child {
+  white-space: nowrap;
+}
+
+.activity-table .activity-details {
+  max-width: 24rem;
+}
+
+.activity-table .activity-details span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-table .activity-time {
+  color: #666;
+}
+
+.activity-table .activity-time .date {
+  font-weight: 500;
+}
+
+.activity-table .activity-time .time {
+  font-size: 0.75rem;
+}
+
+.activity-view-all {
+  padding: 1rem 2rem;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
+
+.activity-view-all a {
+  font-size: 0.875rem;
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.activity-view-all a:hover {
+  color: #1d4ed8;
+}
+
+/* Loading and Error Styles */
+.loading-container {
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid #ddd;
+  border-top: 2px solid #646cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: #666;
+}
+
+.error-message {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #213547;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: 0.875rem;
+  color: #666;
+}
+
 @media (max-width: 768px) {
   .task-list-container,
   .login-container {
@@ -219,5 +424,20 @@ button:focus-visible {
   .navbar-user {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .activity-log-info {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .activity-log-badges {
+    align-self: flex-end;
+  }
+
+  .activity-table th,
+  .activity-table td {
+    padding: 0.5rem 1rem;
   }
 }
