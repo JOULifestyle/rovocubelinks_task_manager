@@ -1,5 +1,5 @@
 import express from 'express';
-import { PrismaClient } from '../../.prisma/client/client.js';
+import { PrismaClient } from '../generated/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
@@ -35,9 +35,6 @@ router.get('/', authenticateToken, async (req, res) => {
       include: {
         creator: {
           select: { id: true, email: true }
-        },
-        assignee: {
-          select: { id: true, email: true }
         }
       }
     });
@@ -51,7 +48,7 @@ router.get('/', authenticateToken, async (req, res) => {
 // POST / - create task (admin only)
 router.post('/', authenticateToken, authorizeRole(['admin']), async (req, res) => {
   try {
-    const { title, description, assignedTo } = req.body;
+    const { title, description } = req.body;
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
@@ -62,14 +59,10 @@ router.post('/', authenticateToken, authorizeRole(['admin']), async (req, res) =
         title,
         description,
         status: 'pending',
-        createdBy: req.user.id,
-        assignedTo: assignedTo || null
+        createdBy: req.user.id
       },
       include: {
         creator: {
-          select: { id: true, email: true }
-        },
-        assignee: {
           select: { id: true, email: true }
         }
       }
@@ -88,7 +81,7 @@ router.post('/', authenticateToken, authorizeRole(['admin']), async (req, res) =
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, status, assignedTo } = req.body;
+    const { title, description, status } = req.body;
 
     const taskId = parseInt(id);
     if (isNaN(taskId)) {
@@ -104,7 +97,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Task not found' });
     }
 
-    // Only allow updates to title, description, status (if marking complete), assignedTo (admin only)
+    // Only allow updates to title, description, status (if marking complete)
     const updateData = {};
     const changes = [];
 
@@ -127,18 +120,13 @@ router.put('/:id', authenticateToken, async (req, res) => {
         return res.status(403).json({ error: 'Only admins can change status except to completed' });
       }
     }
-    if (assignedTo !== undefined && req.user.role === 'admin' && assignedTo !== existingTask.assignedTo) {
-      updateData.assignedTo = assignedTo;
-      changes.push('reassigned');
-    }
 
     // If no changes were made, return early
     if (Object.keys(updateData).length === 0) {
       const task = await prisma.task.findUnique({
         where: { id: taskId },
         include: {
-          creator: { select: { id: true, email: true } },
-          assignee: { select: { id: true, email: true } }
+          creator: { select: { id: true, email: true } }
         }
       });
       return res.json(task);
@@ -149,9 +137,6 @@ router.put('/:id', authenticateToken, async (req, res) => {
       data: updateData,
       include: {
         creator: {
-          select: { id: true, email: true }
-        },
-        assignee: {
           select: { id: true, email: true }
         }
       }

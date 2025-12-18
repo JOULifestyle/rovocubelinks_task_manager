@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '../../.prisma/client/client.js';
+import { PrismaClient } from '../generated/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 

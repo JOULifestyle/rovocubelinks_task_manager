@@ -1,5 +1,5 @@
 import express from 'express';
-import { PrismaClient } from '../../.prisma/client/client.js';
+import { PrismaClient } from '../generated/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';

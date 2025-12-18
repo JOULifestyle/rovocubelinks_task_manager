@@ -52,9 +52,9 @@ const ActivityLogs = () => {
 
   return (
     <div className="task-list-container">
-        <div className="activity-log-section">
-          <h1 className="activity-log-header" style={{fontSize: '2rem'}}>Activity Logs</h1>
-          <p style={{color: '#666', marginBottom: '2rem'}}>Monitor all task-related activities in the system</p>
+      <div className="activity-log-section">
+        <h1 className="activity-log-header">Activity Logs</h1>
+        <p className="activity-description">Monitor all task-related activities in the system</p>
 
         {logs.length === 0 ? (
           <div className="empty-state">
@@ -120,7 +120,7 @@ const ActivityLogs = () => {
             </div>
           </>
         )}
-        </div>
+      </div>
     </div>
   );
 };
