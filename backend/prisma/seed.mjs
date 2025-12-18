@@ -46,8 +46,7 @@ async function main() {
       title: 'Complete project setup',
       description: 'Set up the initial project structure and dependencies',
       status: 'completed',
-      createdBy: admin.id,
-      assignedTo: user.id
+      createdBy: admin.id
     }
   });
 
@@ -56,8 +55,7 @@ async function main() {
       title: 'Implement user authentication',
       description: 'Add login and registration functionality',
       status: 'in_progress',
-      createdBy: admin.id,
-      assignedTo: user.id
+      createdBy: admin.id
     }
   });
 
@@ -66,8 +64,7 @@ async function main() {
       title: 'Design database schema',
       description: 'Create and validate the database models',
       status: 'pending',
-      createdBy: user.id,
-      assignedTo: admin.id
+      createdBy: admin.id
     }
   });
 
