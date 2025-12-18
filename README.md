@@ -1,6 +1,6 @@
 # Task Manager Fullstack Application
 
-A comprehensive task management system with role-based access control, activity logging, and modern web technologies.
+A comprehensive task management system with role-based access control, activity logging, and modern web technologies. Built with a clean separation of concerns using React frontend and Node.js/Express backend with PostgreSQL database.
 
 ## Features
 
@@ -15,16 +15,17 @@ A comprehensive task management system with role-based access control, activity 
 
 ### Backend
 - **Node.js** with Express.js
-- **PostgreSQL** database
-- **Prisma ORM** for type-safe database operations
-- **JWT** for authentication
+- **PostgreSQL** database with Prisma ORM
+- **JWT** for authentication with role-based access control
 - **bcrypt** for password hashing
+- **Comprehensive API** with proper error handling
 
 ### Frontend
-- **React 18** with Vite
-- **React Router** for navigation
-- **Context API** for state management
-- **Axios** for API calls
+- **React 18** with Vite for fast development
+- **React Router** for client-side navigation
+- **Context API** for global state management
+- **Axios** for HTTP requests with interceptors
+- **Responsive design** with custom CSS
 
 ## Quick Start
 
@@ -100,6 +101,49 @@ A comprehensive task management system with role-based access control, activity 
 ### Activity Logging
 - `GET /activities` - Get activity logs (admin only)
 
+## Database Schema
+
+### Core Tables
+
+#### Users Table
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Tasks Table
+```sql
+CREATE TABLE tasks (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  status VARCHAR(50) NOT NULL DEFAULT 'pending',
+  created_by INTEGER REFERENCES users(id),
+  assigned_to INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Activity Logs Table
+```sql
+CREATE TABLE activity_logs (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  action VARCHAR(255) NOT NULL,
+  entity_type VARCHAR(100) NOT NULL,
+  entity_id INTEGER,
+  details TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 ## Project Structure
 
 ```
@@ -108,17 +152,22 @@ task-manager/
 │   ├── src/
 │   │   ├── routes/         # API route handlers
 │   │   ├── middleware/     # Authentication & validation
-│   │   └── prisma/         # Database schema & migrations
-│   ├── .env                # Environment variables
+│   │   └── generated/      # Prisma client (auto-generated)
+│   ├── prisma/
+│   │   ├── schema.prisma   # Database schema
+│   │   ├── migrations/     # Database migrations
+│   │   └── seed.mjs        # Database seeding script
+│   ├── .env.example        # Environment template
 │   └── package.json
 ├── frontend/               # React application
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
-│   │   ├── pages/         # Page components
-│   │   └── services/      # API service layer
+│   │   ├── pages/          # Page components
+│   │   ├── context/        # React Context for state
+│   │   └── services/       # API service layer
 │   └── package.json
-├── ARCHITECTURE_SPECIFICATION.md  # Technical documentation
-└── README.md             # This file
+├── .gitignore             # Git ignore rules
+└── README.md              # This file
 ```
 
 ## Development
