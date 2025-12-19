@@ -47,7 +47,7 @@ A task management system with role-based access control, activity logging, and m
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/JOULifestyle/rovocubelinks_task_manager.git
    cd task-manager
    ```
 

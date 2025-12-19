@@ -18,7 +18,7 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+//Using interceptors so we don’t repeat ourselves in every request.
 // Response interceptor to handle token expiration
 api.interceptors.response.use(
   (response) => response,

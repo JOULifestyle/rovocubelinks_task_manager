@@ -39,7 +39,7 @@ router.get('/', authenticateToken, authorizeRole(['admin']), async (req, res) =>
       }
     });
 
-    // Get task titles for task-related activities
+    // Get task titles for task-related activities 
     const taskIds = logs
       .filter(log => log.entityType === 'Task')
       .map(log => log.entityId);
@@ -54,7 +54,7 @@ router.get('/', authenticateToken, authorizeRole(['admin']), async (req, res) =>
       return map;
     }, {});
 
-    // Add task title to logs
+    // Add task title to logs (This makes sure task title is added, not just task id)
     const logsWithTaskTitles = logs.map(log => ({
       ...log,
       taskTitle: log.entityType === 'Task' ? taskMap[log.entityId] || 'Unknown Task' : null
