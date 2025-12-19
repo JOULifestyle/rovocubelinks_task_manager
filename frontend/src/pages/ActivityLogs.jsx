@@ -95,7 +95,7 @@ const ActivityLogs = () => {
                             {log.action}
                           </span>
                         </td>
-                        <td>{log.entityType} #{log.entityId}</td>
+                        <td>{log.taskTitle || `${log.entityType} #${log.entityId}`}</td>
                         <td>{log.user?.email || 'Unknown User'}</td>
                         <td className="activity-details">
                           <span>

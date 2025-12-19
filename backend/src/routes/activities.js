@@ -28,22 +28,42 @@ router.get('/', authenticateToken, authorizeRole(['admin']), async (req, res) =>
 
     const skip = (pageNum - 1) * limitNum;
 
-    const [logs, total] = await Promise.all([
-      prisma.activityLog.findMany({
-        skip,
-        take: limitNum,
-        orderBy: { timestamp: 'desc' },
-        include: {
-          user: {
-            select: { id: true, email: true, role: true }
-          }
+    const logs = await prisma.activityLog.findMany({
+      skip,
+      take: limitNum,
+      orderBy: { timestamp: 'desc' },
+      include: {
+        user: {
+          select: { id: true, email: true, role: true }
         }
-      }),
-      prisma.activityLog.count()
-    ]);
+      }
+    });
+
+    // Get task titles for task-related activities
+    const taskIds = logs
+      .filter(log => log.entityType === 'Task')
+      .map(log => log.entityId);
+
+    const tasks = taskIds.length > 0 ? await prisma.task.findMany({
+      where: { id: { in: taskIds } },
+      select: { id: true, title: true }
+    }) : [];
+
+    const taskMap = tasks.reduce((map, task) => {
+      map[task.id] = task.title;
+      return map;
+    }, {});
+
+    // Add task title to logs
+    const logsWithTaskTitles = logs.map(log => ({
+      ...log,
+      taskTitle: log.entityType === 'Task' ? taskMap[log.entityId] || 'Unknown Task' : null
+    }));
+
+    const total = await prisma.activityLog.count();
 
     res.json({
-      logs,
+      logs: logsWithTaskTitles,
       pagination: {
         page: pageNum,
         limit: limitNum,

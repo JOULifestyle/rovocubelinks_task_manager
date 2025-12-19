@@ -68,7 +68,7 @@ router.post('/', authenticateToken, authorizeRole(['admin']), async (req, res) =
       }
     });
 
-    await logActivity(req.user.id, 'CREATE', 'Task', task.id, `Created task: ${title}`);
+    await logActivity(req.user.id, 'CREATE', 'Task', task.id, `Created task "${title}"`);
 
     res.status(201).json(task);
   } catch (error) {
@@ -143,7 +143,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
     });
 
     const changeDescription = changes.length > 0 ? changes.join(', ') : 'updated task';
-    await logActivity(req.user.id, 'UPDATE', 'Task', task.id, `${changeDescription}`);
+    await logActivity(req.user.id, 'UPDATE', 'Task', task.id, `Task "${task.title}": ${changeDescription}`);
 
     res.json(task);
   } catch (error) {
@@ -174,7 +174,7 @@ router.delete('/:id', authenticateToken, authorizeRole(['admin']), async (req, r
       where: { id: taskId }
     });
 
-    await logActivity(req.user.id, 'DELETE', 'Task', taskId, `Deleted task: ${task.title}`);
+    await logActivity(req.user.id, 'DELETE', 'Task', taskId, `Deleted task "${task.title}"`);
 
     res.json({ message: 'Task deleted successfully' });
   } catch (error) {
