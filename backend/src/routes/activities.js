@@ -54,11 +54,48 @@ router.get('/', authenticateToken, authorizeRole(['admin']), async (req, res) =>
       return map;
     }, {});
 
-    // Add task title to logs (This makes sure task title is added, not just task id)
-    const logsWithTaskTitles = logs.map(log => ({
-      ...log,
-      taskTitle: log.entityType === 'Task' ? taskMap[log.entityId] || 'Unknown Task' : null
-    }));
+    // Add task title to logs
+    const logsWithTaskTitles = logs.map(log => {
+      let taskTitle = null;
+
+      if (log.entityType === 'Task') {
+        // First try to get from database
+        taskTitle = taskMap[log.entityId];
+
+        // If not found in database, try to extract from details
+        if (!taskTitle && log.details) {
+          // Extract from DELETE logs: "Deleted task "Title""
+          const deleteMatch = log.details.match(/Deleted task "(.+)"/);
+          if (deleteMatch) {
+            taskTitle = deleteMatch[1];
+          }
+          // Extract from CREATE logs: "Created task "Title""
+          else {
+            const createMatch = log.details.match(/Created task "(.+)"/);
+            if (createMatch) {
+              taskTitle = createMatch[1];
+            }
+          }
+          // Extract from UPDATE logs: "Task "Title": changes..."
+          if (!taskTitle) {
+            const updateMatch = log.details.match(/Task "(.+)":/);
+            if (updateMatch) {
+              taskTitle = updateMatch[1];
+            }
+          }
+        }
+
+        // Fallback if nothing found
+        if (!taskTitle) {
+          taskTitle = 'Unknown Task';
+        }
+      }
+
+      return {
+        ...log,
+        taskTitle
+      };
+    });
 
     const total = await prisma.activityLog.count();
 
